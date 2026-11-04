@@ -211,6 +211,8 @@ namespace gInk
         public bool PagesEnabled = false;
         public bool LoadSaveEnabled = true;
         public bool PanEnabled = true;
+        public bool ClipArtEnabled = true;
+        public InkingScreenMenu InkingScreens;
         public bool InkVisibleEnabled = true;
         public DrawingAttributes[] PenAttr = new DrawingAttributes[MaxPenCount+1]; //+1 for SavedPenDA
         public bool AutoScroll;
@@ -533,6 +535,10 @@ namespace gInk
             ReadOptions(Program.RunningFolder + "pens.ini");
 			ReadOptions(Program.RunningFolder + "hotkeys.ini");
             Hotkey_SnapClose.Parse("Escape");
+            InkingScreens = new InkingScreenMenu(this);
+            InkingScreens.EnsureValidArea();
+            InkingScreens.EnsureIconVisible();
+            InkingScreens.AttachToTrayMenu(trayMenu);
 
             if (TagFont=="")     // if no options, we apply text parameters
             {
@@ -1542,6 +1548,9 @@ namespace gInk
 							if (sPara.ToUpper() == "FALSE" || sPara == "0" || sPara.ToUpper() == "OFF")
 								ClearEnabled = false;
 							break;
+                        case "CLIPART_ICON":
+                            ClipArtEnabled = !(sPara.ToUpper() == "FALSE" || sPara == "0" || sPara.ToUpper() == "OFF");
+                            break;
 						case "PAN_ICON":
 							if (sPara.ToUpper() == "FALSE" || sPara == "0" || sPara.ToUpper() == "OFF")
 								PanEnabled = false;
@@ -1608,8 +1617,8 @@ namespace gInk
                                 {
                                     if (c > 0 && d > 0) // else default value ie full screen;
                                     {
-                                        a = a < 0 ? -1 : (Math.Min(Math.Max(SystemInformation.VirtualScreen.Left, a), SystemInformation.VirtualScreen.Right - c));
-                                        b = b < 0 ? -1 : (Math.Min(Math.Max(SystemInformation.VirtualScreen.Top, b), SystemInformation.VirtualScreen.Bottom - d));
+                                        a = (Math.Min(Math.Max(SystemInformation.VirtualScreen.Left, a), SystemInformation.VirtualScreen.Right - c));
+                                        b = (Math.Min(Math.Max(SystemInformation.VirtualScreen.Top, b), SystemInformation.VirtualScreen.Bottom - d));
                                         WindowRect = new Rectangle(a, b, c, d);
                                     }
                                 }
@@ -2354,6 +2363,9 @@ namespace gInk
 							else
 								sPara = "False";
 							break;
+                        case "CLIPART_ICON":
+                            sPara = ClipArtEnabled ? "True" : "False";
+                            break;
                         case "PAN_ICON":
                             if (PanEnabled)
                                 sPara = "True";
@@ -2705,6 +2717,7 @@ namespace gInk
 			trayMenu.MenuItems.Add(Local.MenuEntryOptions + "...", OnOptions);
 			trayMenu.MenuItems.Add("-");
 			trayMenu.MenuItems.Add(Local.MenuEntryExit, OnExit);
+			InkingScreens?.AttachToTrayMenu(trayMenu);
 		}
 
 		private void OnExit(object sender, EventArgs e)

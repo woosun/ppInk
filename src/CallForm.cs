@@ -18,11 +18,13 @@ namespace gInk
         public bool FirstActivation = true;
         private int AltTabPressed = 0;
         private Image backImg = null;
+        private Point RightDownPos;
         public CallForm(Root r)
         {
             InitializeComponent();
             Root = r;
             backImg = FormCollection.getImgFromDiskOrRes("FloatingCall");
+            MouseDown += CallForm_MouseDown;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -58,6 +60,14 @@ namespace gInk
         {
             if (e.Button == MouseButtons.Left)
                 Root.callshortcut();
+            else if (e.Button == MouseButtons.Right && Math.Abs(Cursor.Position.X - RightDownPos.X) < 5 && Math.Abs(Cursor.Position.Y - RightDownPos.Y) < 5)
+                Root.InkingScreens.ShowAt(this, e.Location);
+        }
+
+        private void CallForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+                RightDownPos = Cursor.Position;
         }
 
         private void _MouseMove(object sender, MouseEventArgs e)

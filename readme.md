@@ -1,3 +1,44 @@
+# ppInk 한글 수정판 (비공식)
+
+[ppInk](https://github.com/pubpub-zz/ppInk) v1.9.100을 기반으로 만든 **비공식** 수정판입니다. 원작자가 배포하거나 지원하는 버전이 아닙니다.
+
+## 원본과 달라진 점
+
+- 메뉴와 설정 창 한글화 (`lang/ko-kr.txt`)
+- 떠 있는 아이콘 우클릭 또는 트레이 메뉴의 "필기 모니터"로 필기할 모니터 선택
+- 모니터를 선택하면 아이콘도 그 모니터로 이동하고 위치 저장
+- 저장된 필기 영역이나 아이콘 위치가 현재 모니터와 맞지 않으면 시작할 때 자동 보정
+- 펜 색상 대화상자에서 고른 값을 `pens.ini`에 저장
+- 클립아트 버튼을 끄는 `ClipArt_Icon` 설정 추가
+- 왼쪽 모니터처럼 음수 좌표인 필기 영역 지원
+
+## 사용 방법
+
+[Releases](https://github.com/woosun/ppInk/releases)에서 zip을 받아 압축을 풀고 `ppInk.exe`를 실행합니다. 설치 과정은 없습니다.
+
+- 메일이나 인터넷으로 받은 경우 압축을 풀기 전에 zip 파일 속성에서 "차단 해제"를 체크합니다.
+- exe에 코드 서명이 없어 SmartScreen 경고가 표시될 수 있습니다.
+
+## 확인 상태
+
+자동 시험은 모니터 3대가 연결된 Windows 11 PC 한 대에서 진행했습니다. 다른 PC에서의 실행과 필압, 확대, 125% 배율 모니터의 필기 정확도는 아직 확인하지 않았습니다.
+
+## 영어로 남는 부분
+
+- 색상 대화상자의 RGB, Hex, HSL, Alpha 라벨
+- 녹화 탭의 `Filename ($FN$)`, 측정 단위 기본값 `Pixel`
+- 단축키 이름
+
+## 라이선스와 동봉 파일
+
+- ppInk는 MIT 라이선스입니다. `license.txt`를 참고하세요.
+- `Microsoft.Ink.dll`은 원본 저장소에 포함된 Microsoft 파일이며 이 저장소의 MIT 라이선스 대상이 아닙니다.
+- `install_microsoft_ink_dll.bat`은 원본에 포함된 스크립트로, 관리자 권한으로 시스템의 Microsoft.Ink DLL을 교체합니다. 아래 원본 안내의 오류가 실제로 발생할 때만 내용을 확인한 뒤 사용하세요.
+
+---
+
+아래는 원본 ppInk의 README입니다.
+
 ### *Important Notice*: regression introduced in windows 24H2 update(August 2025)
 A Windows update has introduced a regression when using microsoft.ink.dll (see [Exception analysis](https://developercommunity.visualstudio.com/t/SecurityException-in-MicrosoftInkInkOv/10958778#T-N10971297) and [issue #346](https://github.com/pubpub-zz/ppInk/issues/346) ).
 Until Microsoft fixes the issue I've attached a script _install_microsoft_ink_dll.bat_ that will revert to the latest operational dll. **this script has to be executed with admin rights**.

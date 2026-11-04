@@ -718,7 +718,7 @@ namespace gInk
             if (Root.ToolbarOrientation <= Orientation.Horizontal)
             {
                 gpButtons.Height = dim;
-                gpButtons.Width = (int)((dim1 * .5 + dim3) + (penSec + (Root.PensExtraSet ? (dim4 / 6) : 0) + (Root.ToolsEnabled ? (6 * dim4s) : 0) + (Root.EraserEnabled ? dim4 : 0) + (Root.PanEnabled ? 2 * dim4s : 0)
+                gpButtons.Width = (int)((dim1 * .5 + dim3) + (penSec + (Root.PensExtraSet ? (dim4 / 6) : 0) + (Root.ToolsEnabled ? ((Root.ClipArtEnabled ? 6 : 4) * dim4s) : 0) + (Root.EraserEnabled ? dim4 : 0) + (Root.PanEnabled ? 2 * dim4s : 0)
                                                                      + (Root.PointerEnabled ? dim4 : 0) + (Root.PenWidthEnabled ? dim4 : 0) + (Root.InkVisibleEnabled ? dim4 : 0) + (Root.ZoomEnabled > 0 ? dim4s : 0)
                                                                      + (Root.SnapEnabled ? dim4 : 0) + (Root.UndoEnabled ? dim4 : 0) + (Root.ClearEnabled ? dim4 : 0)
                                                                      + (Root.PagesEnabled ? dim4s : 0) + (Root.LoadSaveEnabled ? dim4s : 0)
@@ -728,7 +728,7 @@ namespace gInk
             else //Vertical
             {
                 gpButtons.Width = dim;
-                gpButtons.Height = (int)((dim1 * .5 + dim3) + (penSec + (Root.PensExtraSet ? (dim4 / 6) : 0) + (Root.ToolsEnabled ? (6 * dim4s) : 0) + (Root.EraserEnabled ? dim4 : 0) + (Root.PanEnabled ? 2 * dim4s : 0)
+                gpButtons.Height = (int)((dim1 * .5 + dim3) + (penSec + (Root.PensExtraSet ? (dim4 / 6) : 0) + (Root.ToolsEnabled ? ((Root.ClipArtEnabled ? 6 : 4) * dim4s) : 0) + (Root.EraserEnabled ? dim4 : 0) + (Root.PanEnabled ? 2 * dim4s : 0)
                                                                       + (Root.PointerEnabled ? dim4 : 0) + (Root.PenWidthEnabled ? dim4 : 0) + (Root.InkVisibleEnabled ? dim4 : 0) + (Root.ZoomEnabled > 0 ? dim4s : 0)
                                                                       + (Root.SnapEnabled ? dim4 : 0) + (Root.UndoEnabled ? dim4 : 0) + (Root.ClearEnabled ? dim4 : 0)
                                                                       + (Root.PagesEnabled ? dim4s : 0) + (Root.LoadSaveEnabled ? dim4s : 0)
@@ -868,6 +868,9 @@ namespace gInk
                 btText.Visible = true;
                 SetButtonPosition(btArrow, btText, dim3);
 
+                prev = btText;
+                if (Root.ClipArtEnabled)
+                {
                 btClipArt.Height = dim1s;
                 btClipArt.Width = dim1s;
                 btClipArt.Visible = true;
@@ -935,6 +938,14 @@ namespace gInk
                     btClip3.Tag = Root.ImageStamp3.Clone();
                 }
                 prev = btClip2;
+                }
+                else
+                {
+                    btClipArt.Visible = false;
+                    btClip1.Visible = false;
+                    btClip2.Visible = false;
+                    btClip3.Visible = false;
+                }
             }
             else
             {
@@ -6385,6 +6396,7 @@ namespace gInk
                         //btPen[b].FlatAppearance.MouseOverBackColor = Root.PenAttr[b].Color;
                         SelectPen(b + FirstPenDisplayed);
                         Root.UponButtonsUpdate |= 0x2;
+                        Root.SaveOptions(Program.RunningFolder + "pens.ini");
                     };
                     AllowInteractions(false);
                     //ToUnThrough();
